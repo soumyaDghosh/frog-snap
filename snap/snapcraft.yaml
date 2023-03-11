@@ -11,21 +11,14 @@ description: |
 grade: devel # must be 'stable' to release into candidate/stable channels
 confinement: devmode # use 'strict' once you have the right plugs and slots
 compression: lzo
-#environment:
-  # WORKAROUND: Add python modules in Snap to search path
- # PYTHONPATH: ${SNAP}/lib/python3.10/site-packages:${SNAP}/usr/lib/python3/dist-packages
-layout:
-  /usr/share/frog:
-    bind: $SNAP/usr/share/frog
-  /usr/local/lib/python3.10/dist-packages/frog:
-    bind: $SNAP/usr/local/lib/python3.10/dist-packages/frog
-  /usr/lib/python3/dist-packages:
-    bind: $SNAP/usr/lib/python3/dist-packages
+environment:
+   #WORKAROUND: Add python modules in Snap to search path
+   PYTHONPATH: ${SNAP}/lib/python3.10/site-packages:${SNAP}/usr/lib/python3/dist-packages
 parts:
-  meson:
+  pytesseract:
     plugin: python
-    source: https://github.com/mesonbuild/meson.git
-    source-tag: 1.0.0
+    source: https://github.com/madmaze/pytesseract.git
+    source-tag: v0.3.10
     build-environment:
       # WORKAROUND: The python plugin is broken with gnome extension
       - PATH: ${CRAFT_PART_INSTALL}/bin:${PATH}
@@ -44,56 +37,27 @@ parts:
       - -bin/pip3.10
       - -pyvenv.cfg
     python-packages:
-      - pytesseract
+      - pyzbar
+      - 
   frog:
+    after: [pytesseract]
     plugin: meson
     source: https://github.com/TenderOwl/Frog.git
     source-type: git
     source-tag: "1.2.0"
+    meson-parameters:
+      - --prefix=/snap/frog/current/usr
     # See 'snapcraft plugins'
     build-packages:
-      - ninja-build
-      - gettext
-      - pkg-config
-      - glibc-source
-      - libglib2.0-dev
-      - desktop-file-utils
-      - appstream
-      - libappstream-dev 
-      - libglib2.0-bin
-      - libappstream-glib-dev
-      - python-is-python3
-      - python3-gi
-      - python-gi-dev 
-      - python3-pyzbar
-      - python3-pydbus 
-      - tesseract-ocr 
-      - libnotify-dev
       - libleptonica-dev
-      - libgtk-3-dev
+      - libportal-gtk3-dev
+      - tesseract-ocr
     stage-packages:
-      - gettext
-      - pkg-config
-      - glibc-source
-      - libglib2.0-0
-      - libglib2.0-dev
-      - desktop-file-utils
-      - appstream
-      - libappstream-dev 
-      - libglib2.0-bin
-      - libappstream-glib-dev
-      - python-is-python3
-      - python3-gi
-      - python-gi-dev 
-      - python3-pyzbar
-      - python3-pydbus 
-      - python3-tesserocr 
-      - tesseract-ocr 
       - libnotify-dev
       - libleptonica-dev
-      - libgtk-3-dev
-      - libgtk-4-1
-      - python3-pil
+      - xdg-user-dirs
+      - libportal-gtk3-1
+      - tesseract-ocr
     override-pull: |
       craftctl default
       # WORKAROUND: Point icon directly to SVG otherwise snapcraft can't find it
@@ -101,29 +65,19 @@ parts:
     override-build: |
       craftctl default
       # WORKAROUND: Use python from search path, the path detected by meson doesn't exist when running the Snap
-      # sed -e '1c#!/usr/bin/env python3' -i "${CRAFT_PART_INSTALL}/usr/bin/frog"
-    parse-info: [/usr/share/appdata/com.github.tenderowl.frog.appdata.xml]
+      sed -e '1c#!/usr/bin/env python3' -i "${CRAFT_PART_INSTALL}/usr/bin/frog"
+    parse-info: [usr/share/appdata/com.github.tenderowl.frog.appdata.xml]
     organize:
       snap/frog/current/usr: usr
-slots:
-  frog:
-    interface: dbus
-    bus: session
-    name: com.github.tenderowl.frog
-plugs:
-  pictures:
-    interface: personal-files
-    write:
-      - $HOME/Pictures
+
 apps:
   frog:
     command: usr/bin/frog
     common-id: com.github.tenderowl.frog
     extensions: [gnome]
-   # desktop: usr/share/applications/com.github.tenderowl.frog.desktop
+    desktop: usr/share/applications/com.github.tenderowl.frog.desktop
     environment:
-      PYTHONPATH: ${SNAP}/lib/python3.10/site-packages:${SNAP}/usr/lib/python3/dist-packages
-      XDG_DATA_HOME: $SNAP_USER_DATA/.local/share 
+      GTK_USE_PORTAL=1
     plugs:
       - home
       - pictures
