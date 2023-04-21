@@ -51,6 +51,8 @@ parts:
       - tesseract-ocr
     stage-packages:
       - tesseract-ocr
+      - leptonica-progs
+      - zbar-tools
       - xdg-user-dirs
     override-pull: |
       craftctl default
@@ -58,6 +60,7 @@ parts:
     override-build: |
       craftctl default
       pip install --target=$CRAFT_PART_INSTALL/snap/frog/current/usr/lib/python3/dist-packages pytesseract
+      pip install --target=$CRAFT_PART_INSTALL/snap/frog/current/usr/lib/python3/dist-packages pyzbar
       # WORKAROUND: Use python from search path, the path detected by meson doesn't exist when running the Snap
       sed -e '1c#!/usr/bin/env python3' -i "${CRAFT_PART_INSTALL}/snap/frog/current/usr/bin/frog"
     parse-info: [usr/share/appdata/com.github.tenderowl.frog.appdata.xml]
