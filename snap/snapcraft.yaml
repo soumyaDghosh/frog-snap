@@ -41,10 +41,10 @@ parts:
     source-type: git
     source-tag: $SNAPCRAFT_PROJECT_VERSION
     meson-parameters:
-      - --prefix=usr/
+      - --prefix=/snap/frog/current/usr
     # See 'snapcraft plugins'
     build-environment:
-      - PYTHONDIR: /usr/lib/python3.10/dist-packages/
+      - PYTHONDIR: /snap/frog/current/usr/lib/python3.10/dist-packages/
     build-packages:
       - libleptonica-dev
       - libportal-gtk3-dev
