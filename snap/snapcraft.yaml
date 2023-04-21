@@ -43,6 +43,8 @@ parts:
     meson-parameters:
       - --prefix=usr/
     # See 'snapcraft plugins'
+    build-environment:
+      - PYTHONDIR: /usr/lib/python3.10/dist-packages/
     build-packages:
       - libleptonica-dev
       - libportal-gtk3-dev
