@@ -70,7 +70,7 @@ apps:
     extensions: [gnome]
     desktop: usr/share/applications/com.github.tenderowl.frog.desktop
     environment:
-      - XDG_DATA_HOME: $SNAP_USER_DATA/.local/share
+      - XDG_DATA_HOME: '$SNAP_USER_DATA/.local/share'
     plugs:
       - network
 
