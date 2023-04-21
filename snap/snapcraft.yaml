@@ -44,7 +44,7 @@ parts:
       - --prefix=/snap/frog/current/usr
     # See 'snapcraft plugins'
     build-environment:
-      - PYTHONDIR: /snap/frog/current/usr/lib/python3.10/dist-packages/
+      - pythondir: /snap/frog/current/usr/lib/python3.10/dist-packages/
     build-packages:
       - libleptonica-dev
       - libportal-gtk3-dev
