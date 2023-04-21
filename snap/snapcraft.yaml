@@ -41,7 +41,7 @@ parts:
     source-type: git
     source-tag: $SNAPCRAFT_PROJECT_VERSION
     meson-parameters:
-      - --prefix=/snap/frog/current/usr
+      - --prefix=usr/
     # See 'snapcraft plugins'
     build-packages:
       - libleptonica-dev
