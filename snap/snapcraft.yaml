@@ -51,6 +51,9 @@ parts:
       - tesseract-ocr
     stage-packages:
       - tesseract-ocr
+    override-pull: |
+      craftctl default
+      sed -e "s|install_subdir('frog', install_dir: pythondir)|install_subdir('frog', install_dir: '/snap/frog/current/usr/lib/python3/dist-packages')|g" -i meson.build
     override-build: |
       craftctl default
       pip install --target=$CRAFT_PART_INSTALL/snap/frog/current/usr/lib/python3/dist-packages pytesseract
