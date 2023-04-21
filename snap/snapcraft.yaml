@@ -39,7 +39,7 @@ parts:
     plugin: meson
     source: https://github.com/TenderOwl/Frog.git
     source-type: git
-    source-tag: $SNAPCRAFT_PROJECT_VERSION
+    #source-tag: $SNAPCRAFT_PROJECT_VERSION
     meson-parameters:
       - --prefix=/snap/frog/current/usr
     # See 'snapcraft plugins'
@@ -53,7 +53,6 @@ parts:
       - tesseract-ocr
       - leptonica-progs
       - zbar-tools
-      - libgtk-4-1
     override-pull: |
       craftctl default
       sed -e "s|install_subdir('frog', install_dir: pythondir)|install_subdir('frog', install_dir: '/snap/frog/current/usr/lib/python3/dist-packages')|g" -i meson.build
