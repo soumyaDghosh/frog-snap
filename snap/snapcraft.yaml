@@ -84,6 +84,7 @@ parts:
   #    - PyGObject
   frog:
     #after: [pytesseract]
+    after: [gtk4]
     plugin: meson
     source: https://github.com/TenderOwl/Frog.git
     source-type: git
