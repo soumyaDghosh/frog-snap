@@ -50,6 +50,7 @@ parts:
       - libportal-gtk3-dev
       - tesseract-ocr
     stage-packages:
+      - libgtk-4-1
       - tesseract-ocr
       - leptonica-progs
       - zbar-tools
