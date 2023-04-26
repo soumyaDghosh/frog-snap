@@ -34,7 +34,6 @@ parts:
       - -Dbuild-tests=false
       - -Dmedia-gstreamer=disabled
       - -Ddemos=false
-      - -Dbuild-testsuite=false
       - -Dbuild-examples=false
       - -Dbuild-tests=false
       - -Dprint-cups=enabled
