@@ -29,6 +29,7 @@ parts:
       - tesseract-ocr
       - leptonica-progs
       - zbar-tools
+      - gobject-introspection
       - python3-gi
     override-pull: |
       craftctl default
