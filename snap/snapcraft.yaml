@@ -74,7 +74,11 @@ parts:
       - usr/lib/$CRAFT_ARCH_TRIPLET/libgif.so.7
       - usr/lib/$CRAFT_ARCH_TRIPLET/libgif.so.7.1.0
 
-
+slots:
+  frog:
+    interface: dbus
+    bus: session
+    name: com.github.tenderowl.frog
 apps:
   frog:
     command: usr/bin/frog
