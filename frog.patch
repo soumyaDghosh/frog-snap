@@ -1,0 +1,35 @@
+diff -Naur a/data/com.github.tenderowl.frog.appdata.xml.in b/data/com.github.tenderowl.frog.appdata.xml.in
+--- a/data/com.github.tenderowl.frog.appdata.xml.in	2023-07-02 07:50:07.515474393 +0530
++++ b/data/com.github.tenderowl.frog.appdata.xml.in	2023-07-02 07:53:19.599038562 +0530
+@@ -1,6 +1,7 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <component type="desktop">
+     <id>com.github.tenderowl.frog</id>
++    <icon type="stock">snap.frog.com.github.tenderowl.frog</icon>
+     <metadata_license>CC0-1.0</metadata_license>
+     <project_license>MIT</project_license>
+     <name>Frog</name>
+diff -Naur a/data/com.github.tenderowl.frog.desktop.in b/data/com.github.tenderowl.frog.desktop.in
+--- a/data/com.github.tenderowl.frog.desktop.in	2023-07-02 07:50:18.059702156 +0530
++++ b/data/com.github.tenderowl.frog.desktop.in	2023-07-02 07:53:34.131263863 +0530
+@@ -3,7 +3,7 @@
+ GenericName=Text extraction tool
+ Comment=Extract text from any image, video or web page
+ Exec=frog
+-Icon=com.github.tenderowl.frog
++Icon=snap.frog.com.github.tenderowl.frog
+ Terminal=false
+ Type=Application
+ Categories=GTK;Utility;Office;
+diff -Naur a/frog/language_manager.py b/frog/language_manager.py
+--- a/frog/language_manager.py	2023-07-02 07:47:49.464066403 +0530
++++ b/frog/language_manager.py	2023-07-02 07:54:00.723662316 +0530
+@@ -191,7 +191,7 @@
+             os.mkdir(tessdata_dir)
+ 
+         dest_path = os.path.join(tessdata_dir, 'eng.traineddata')
+-        source_path = pathlib.Path('/app/share/appdata/eng.traineddata')
++        source_path = pathlib.Path('/snap/frog/current/usr/share/appdata/eng.traineddata')
+         if os.path.exists(dest_path):
+             return
+ 
