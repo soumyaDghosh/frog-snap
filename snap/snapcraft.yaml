@@ -3,11 +3,13 @@ base: core22 # the base snap is the execution environment for this snap
 grade: stable # must be 'stable' to release into candidate/stable channels
 confinement: strict # use 'strict' once you have the right plugs and slots
 adopt-info: frog
-#icon: com.github.tenderowl.frog.svg
-compression: lzo
-environment:
-   #WORKAROUND: Add python modules in Snap to search path
-   PYTHONPATH: ${SNAP}/lib/python3.10/site-packages:${SNAP}/usr/lib/python3/dist-packages
+#compression: lzo
+
+architectures:
+  - build-on: amd64
+  - build-on: arm64
+  - build-on: armhf
+
 parts:
   pytesseract:
     source: https://github.com/madmaze/pytesseract.git
@@ -24,12 +26,18 @@ parts:
       - -usr/bin/Activate.ps1
       - -usr/bin/python*
       - -usr/bin/pip*
+      - -usr/lib/*/*/pip*
+      - -usr/lib/*/*/pkg_resources
+      - -usr/lib/*/*/setuptools*
+      - -usr/lib/*/*/_dist*
+      - -usr/lib/*/*/Pillow.libs
+      - -bin
       - -pyvenv.cfg
       - -lib
       - -lib64
       - -include
     organize:
-      bin: usr/bin
+      #bin: usr/bin
       lib/python3.10/site-packages: usr/lib/python3/dist-packages
   frog:
     plugin: meson
@@ -51,6 +59,11 @@ parts:
       craftctl default
       # WORKAROUND: Use python from search path, the path detected by meson doesn't exist when running the Snap
       sed -e '1c#!/usr/bin/env python3' -i "${CRAFT_PART_INSTALL}/snap/frog/current/usr/bin/frog"
+      mkdir -p $CRAFT_PART_INSTALL/meta/gui
+      cp -r $CRAFT_PART_INSTALL/snap/frog/current/usr/share/icons $CRAFT_PART_INSTALL/meta/gui/
+      for i in `find $CRAFT_PART_INSTALL/meta/gui/icons -name "*.svg" -o -name "*.png"`; do
+        mv $i "`dirname $i`/snap.$CRAFT_PROJECT_NAME.`basename $i`"
+      done
     parse-info: [usr/share/appdata/com.github.tenderowl.frog.appdata.xml]
     organize:
       snap/frog/current: .
@@ -87,5 +100,6 @@ apps:
     desktop: usr/share/applications/com.github.tenderowl.frog.desktop
     environment:
       XDG_DATA_HOME: $SNAP_USER_DATA/.local/share
+      PYTHONPATH: $SNAP/usr/lib/python3/dist-packages:$PYTHONPATH
     plugs:
       - network
