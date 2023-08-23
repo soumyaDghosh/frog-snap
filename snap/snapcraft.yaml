@@ -75,6 +75,7 @@ parts:
       - liblept5
       - libzbar0
       - libgif7
+      - gir1.2-gstreamer-1.0
     prime:
       - usr/bin/tesseract
       #- usr/bin/text2image
@@ -87,6 +88,11 @@ parts:
       - usr/lib/$CRAFT_ARCH_TRIPLET/liblept.so.5.0.4
       - usr/lib/$CRAFT_ARCH_TRIPLET/libgif.so.7
       - usr/lib/$CRAFT_ARCH_TRIPLET/libgif.so.7.1.0
+      - usr/lib/$CRAFT_ARCH_TRIPLET/girepository-1.0/Gst-1.0.typelib
+      - usr/lib/$CRAFT_ARCH_TRIPLET/girepository-1.0/GstBase-1.0.typelib
+      - usr/lib/$CRAFT_ARCH_TRIPLET/girepository-1.0/GstCheck-1.0.typelib
+      - usr/lib/$CRAFT_ARCH_TRIPLET/girepository-1.0/GstController-1.0.typelib
+      - usr/lib/$CRAFT_ARCH_TRIPLET/girepository-1.0/GstNet-1.0.typelib
 
 slots:
   frog:
