@@ -23,6 +23,7 @@ parts:
       - PYTHONPATH: ""
     python-packages:
       - pyzbar==0.1.9
+      - gTTS==2.3.2
     prime:
       - -usr/bin/activate*
       - -usr/bin/Activate.ps1
