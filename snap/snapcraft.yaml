@@ -110,3 +110,4 @@ apps:
       PYTHONPATH: $SNAP/usr/lib/python3/dist-packages:$PYTHONPATH
     plugs:
       - network
+      - audio-playback
