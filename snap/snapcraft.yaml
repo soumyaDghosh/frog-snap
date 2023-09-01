@@ -43,7 +43,7 @@ parts:
   frog:
     plugin: meson
     source: https://github.com/TenderOwl/Frog.git
-    source-tag: '1.4.1'
+    source-tag: '1.4.2'
     source-depth: 1
     meson-parameters:
       - --prefix=/snap/frog/current/usr
