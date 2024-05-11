@@ -65,7 +65,7 @@ parts:
     override-pull: |
       craftctl default
       sed -e "s|install_subdir('frog', install_dir: pythondir)|install_subdir('frog', install_dir: '/snap/frog/current/usr/lib/python3/dist-packages')|g" -i meson.build
-      sed -i 's#/app#\$SNAP/usr' $CRAFT_PART_SRC/frog/language_manager.py
+      sed -i 's#/app#\/snap/frog/current/usr#' $CRAFT_PART_SRC/frog/language_manager.py
     override-build: |
       craftctl default
       # WORKAROUND: Use python from search path, the path detected by meson doesn't exist when running the Snap
@@ -114,7 +114,8 @@ apps:
     desktop: usr/share/applications/com.github.tenderowl.frog.desktop
     environment:
       PYTHONPATH: $SNAP/usr/lib/python3/dist-packages:$PYTHONPATH
-      DYLD_LIBRARY_PATH: $LD_LIBRARY_PATH
+      #DYLD_LIBRARY_PATH: $LD_LIBRARY_PATH
     plugs:
       - network
+      - network-status
       - audio-playback
