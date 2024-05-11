@@ -27,7 +27,11 @@ parts:
     python-packages:
       - pytesseract==0.3.10
       - pyzbar==0.1.9
-      - gTTS==2.3.2
+      - gTTS==2.4.0
+      - python-dateutil==2.8.2
+      - loguru==0.7.2
+      - nanoid==2.0.0
+      - posthog==3.4.0
     prime:
       - -usr/bin/activate*
       - -usr/bin/Activate.ps1
@@ -54,12 +58,14 @@ parts:
     build-packages:
       - libleptonica-dev
       - tesseract-ocr
+    build-snaps:
+      - blueprint-compiler
     build-environment:
-      - GI_TYPELIB_PATH: /snap/gnome-42-2204-sdk/current/usr/lib/girepository-1.0:/snap/gnome-42-2204-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILT_FOR/girepository-1.0
+      - GI_TYPELIB_PATH: /snap/gnome-42-2204-sdk/current/usr/lib/girepository-1.0:/snap/gnome-42-2204-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/girepository-1.0
     override-pull: |
       craftctl default
       sed -e "s|install_subdir('frog', install_dir: pythondir)|install_subdir('frog', install_dir: '/snap/frog/current/usr/lib/python3/dist-packages')|g" -i meson.build
-      patch -p1 < $CRAFT_PROJECT_DIR/frog.patch
+      sed -i 's#/app#\$SNAP/usr' $CRAFT_PART_SRC/frog/language_manager.py
     override-build: |
       craftctl default
       # WORKAROUND: Use python from search path, the path detected by meson doesn't exist when running the Snap
@@ -77,24 +83,23 @@ parts:
     stage-packages:
       - tesseract-ocr
       - liblept5
-      - libzbar0
       - libgif7
+      - libzbar0
       - gir1.2-gstreamer-1.0
     prime:
       - usr/bin/tesseract
-      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILT_FOR/libtesseract.so.4
-      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILT_FOR/libtesseract.so.4.0.1
-      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILT_FOR/libzbar.so.0
-      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILT_FOR/libzbar.so.0.3.0
-      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILT_FOR/liblept.so.5
-      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILT_FOR/liblept.so.5.0.4
-      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILT_FOR/libgif.so.7
-      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILT_FOR/libgif.so.7.1.0
-      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILT_FOR/girepository-1.0/Gst-1.0.typelib
-      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILT_FOR/girepository-1.0/GstBase-1.0.typelib
-      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILT_FOR/girepository-1.0/GstCheck-1.0.typelib
-      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILT_FOR/girepository-1.0/GstController-1.0.typelib
-      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILT_FOR/girepository-1.0/GstNet-1.0.typelib
+      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libtesseract.so.4
+      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libtesseract.so.4.0.1
+      - usr/lib/*/libzbar.so*
+      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/liblept.so.5
+      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/liblept.so.5.0.4
+      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libgif.so.7
+      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libgif.so.7.1.0
+      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/girepository-1.0/Gst-1.0.typelib
+      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/girepository-1.0/GstBase-1.0.typelib
+      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/girepository-1.0/GstCheck-1.0.typelib
+      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/girepository-1.0/GstController-1.0.typelib
+      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/girepository-1.0/GstNet-1.0.typelib
 
 slots:
   frog:
@@ -109,6 +114,7 @@ apps:
     desktop: usr/share/applications/com.github.tenderowl.frog.desktop
     environment:
       PYTHONPATH: $SNAP/usr/lib/python3/dist-packages:$PYTHONPATH
+      DYLD_LIBRARY_PATH: $LD_LIBRARY_PATH
     plugs:
       - network
       - audio-playback
